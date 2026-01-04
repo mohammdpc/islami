@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -74,8 +75,8 @@ class QuranScreen extends StatelessWidget {
             Expanded(
               flex: 2,
               child: ListView.separated(
-                itemCount: 114,
-                itemBuilder: (context, index) => SuraTile(index: index + 1),
+                itemCount: arabicAuranSuras.length,
+                itemBuilder: (context, index) => SuraTile(index: index),
                 separatorBuilder: (context, index) => Divider(
                   height: 20,
                   thickness: 1,
@@ -153,14 +154,14 @@ class SuraTile extends StatelessWidget {
     return ListTile(
       onTap: () => Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => SuraScreen()),
+        MaterialPageRoute(builder: (context) => SuraScreen(index: index)),
       ),
       leading: Stack(
         alignment: AlignmentGeometry.center,
         children: [
           Image.asset('assets/Icons/img_sur_number_frame.png'),
           Text(
-            '$index',
+            '${index+1}',
             style: TextStyle(
               color: textColor,
               fontSize: widthRatio(context, 20),
@@ -169,15 +170,15 @@ class SuraTile extends StatelessWidget {
         ],
       ),
       title: Text(
-        'Al-Fatiha',
+        englishQuranSurahs[index],
         style: TextStyle(color: textColor, fontSize: widthRatio(context, 20)),
       ),
       subtitle: Text(
-        '7 Verses  ',
+        AyaNumber[index],
         style: TextStyle(color: textColor, fontSize: widthRatio(context, 14)),
       ),
       trailing: Text(
-        'الفاتحه',
+        arabicAuranSuras[index],
         style: TextStyle(color: textColor, fontSize: widthRatio(context, 20)),
       ),
     );
@@ -185,7 +186,8 @@ class SuraTile extends StatelessWidget {
 }
 
 class SuraScreen extends StatelessWidget {
-  const SuraScreen({super.key});
+  final int index;
+  const SuraScreen({super.key,required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +196,7 @@ class SuraScreen extends StatelessWidget {
       appBar: AppBar(
         iconTheme: IconThemeData(color: mainColor),
         title: Text(
-          'Al-Fatiha',
+          englishQuranSurahs[index],
           style: TextStyle(color: mainColor, fontSize: widthRatio(context, 20)),
         ),
         centerTitle: true,
@@ -221,7 +223,7 @@ class SuraScreen extends StatelessWidget {
                   height: heightRatio(context, 93),
                 ),
                 Text(
-                  'الفاتحه',
+                  arabicAuranSuras[index],
                   style: TextStyle(
                     color: mainColor,
                     fontSize: widthRatio(context, 20),
@@ -236,7 +238,7 @@ class SuraScreen extends StatelessWidget {
                 ),
               ],
             ),
-            Text(r'[1]بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ [2] الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ [3] الرَّحْمَنِ الرَّحِيمِ [4] مَالِكِ يَوْمِ الدِّينِ [5] إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ [6] اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ [7] صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّين',textAlign: TextAlign.right,style: TextStyle(color: mainColor, fontSize: widthRatio(context, 20)),)
+            Text(File('assets/Suras/Suras/${index+1}.txt').readAsStringSync(),textAlign: TextAlign.right,style: TextStyle(color: mainColor, fontSize: widthRatio(context, 20)),)
           ],
         ),
       ),
