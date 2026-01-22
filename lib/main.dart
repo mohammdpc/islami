@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'quranscreen.dart';
 import 'hadeith.dart';
+
+import 'islami_provider.dart';
 import 'theme.dart';
 void main() {
-  runApp(const MyApp());
+  
+  runApp(Provider(create:(_)=>IslamiProvider(),
+  child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
