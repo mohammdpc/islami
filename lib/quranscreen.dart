@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'utils.dart';
 
 class QuranScreen extends StatefulWidget {
-  QuranScreen({super.key});
+  const QuranScreen({super.key});
 
   @override
   State<QuranScreen> createState() => _QuranScreenState();
@@ -12,6 +12,17 @@ class QuranScreen extends StatefulWidget {
 
 class _QuranScreenState extends State<QuranScreen> {
   List<int> searchList = [];
+
+  void addToMostRecent(int index) {
+    if (mostRecent.length >= 10) {
+      mostRecent.removeLast();
+    }
+    if (mostRecent.contains(index)) {
+      mostRecent.remove(index);
+    }
+    mostRecent.insert(0, index);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,72 +53,108 @@ class _QuranScreenState extends State<QuranScreen> {
                 hintText: 'Sura Name',
                 hintStyle: TextStyle(color: textColor),
               ),
+
+              onChanged: (v) {
+                searchList.clear();
+                if(v.isNotEmpty){
+                  if (RegExp(r'[A-Z]').hasMatch(v.toUpperCase())) {
+                    String t = '';
+                    for (int i = 0; i < englishQuranSurahs.length; i++) {
+                      t = englishQuranSurahs[i].toUpperCase();
+                      if (t.contains(v.toUpperCase())) {
+                        searchList.add(i);
+                      }
+                    }
+                  } else {
+                    for (int i = 0; i < arabicAuranSuras.length; i++) {
+                      if (arabicAuranSuras[i].contains(v)) {
+                        searchList.add(i);
+                      }
+                    }
+                  }
+                  if (searchList.isEmpty) {
+                    searchList.add(-1);
+                  }
+                }
+                setState(() {});
+              },
               style: TextStyle(color: textColor),
               cursorColor: mainColor,
             ),
-            Column(
-              children: [
-                mostRecent.isEmpty
-                    ? SizedBox()
-                    : Column(
-                  children: [
-                    Align(
-                      alignment: AlignmentGeometry.centerLeft,
-                      child: Text(
-                        'Most Recently',
-                        style: TextStyle(
-                          color: textColor,
-                          fontSize: widthRatio(context, 16),
+            searchList.isNotEmpty
+                ? Expanded(
+                    child: ListView.builder(
+                      itemCount: searchList.isEmpty ? 1 : searchList.length,
+                      itemBuilder: (context, index) {
+                        return searchList[0] == -1
+                            ? Text('Not Found')
+                            : SuraTile(
+                                index: searchList[index],
+                                f: (){
+                                  addToMostRecent(searchList[index]);
+                                  debugPrint(index.toString());
+                                },
+                              );
+                      },
+                    ),
+                  )
+                : Expanded(
+                  child: Column(
+                      children: [
+                        mostRecent.isEmpty
+                            ? SizedBox()
+                            : Column(
+                                children: [
+                                  Align(
+                                    alignment: AlignmentGeometry.centerLeft,
+                                    child: Text(
+                                      'Most Recently',
+                                      style: TextStyle(
+                                        color: textColor,
+                                        fontSize: widthRatio(context, 16),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: heightRatio(context, 170),
+                                    child: ListView.builder(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: mostRecent.length,
+                                      itemBuilder: (context, index) =>
+                                          RecentlyCards(index: mostRecent[index]),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                        Align(
+                          alignment: AlignmentGeometry.centerLeft,
+                          child: Text(
+                            'Suras List',
+                            style: TextStyle(
+                              color: textColor,
+                              fontSize: widthRatio(context, 16),
+                            ),
+                          ),
                         ),
-                      ),
+                        Expanded(
+                          flex: 2,
+                          child: ListView.separated(
+                            itemCount: arabicAuranSuras.length,
+                            itemBuilder: (context, index) => SuraTile(
+                              index: index,
+                              f: () => addToMostRecent(index),
+                            ),
+                            separatorBuilder: (context, index) => Divider(
+                              height: 20,
+                              thickness: 1,
+                              indent: widthRatio(context, 44),
+                              endIndent: widthRatio(context, 44),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
-                    SizedBox(
-                      height: heightRatio(context, 170),
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: mostRecent.length,
-                        itemBuilder: (context, index) =>
-                            RecentlyCards(index: mostRecent[index]),
-                      ),
-                    ),
-                  ],
                 ),
-                Align(
-                  alignment: AlignmentGeometry.centerLeft,
-                  child: Text(
-                    'Suras List',
-                    style: TextStyle(
-                      color: textColor,
-                      fontSize: widthRatio(context, 16),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  flex: 2,
-                  child: ListView.separated(
-                    itemCount: arabicAuranSuras.length,
-                    itemBuilder: (context, index) => SuraTile(
-                      index: index,
-                      f: () => setState(() {
-                        if (mostRecent.length >= 10) {
-                          mostRecent.removeLast();
-                        }
-                        if(mostRecent.contains(index)){
-                          mostRecent.remove(index);
-                        }
-                        mostRecent.insert(0, index);
-                      }),
-                    ),
-                    separatorBuilder: (context, index) => Divider(
-                      height: 20,
-                      thickness: 1,
-                      indent: widthRatio(context, 44),
-                      endIndent: widthRatio(context, 44),
-                    ),
-                  ),
-                ),
-              ],
-            )
           ],
         ),
       ),
