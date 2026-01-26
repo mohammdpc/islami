@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'quranscreen.dart';
-import 'hadeith.dart';
+import 'quran_screen.dart';
+import 'hadith.dart';
+import 'sebha_screen.dart';
 
 import 'islami_provider.dart';
 import 'theme.dart';
-void main() {
-  
+import 'utils.dart';
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  loadHadithList();
   runApp(Provider(create:(_)=>IslamiProvider(),
   child: const MyApp(),
   ));
@@ -43,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: [QuranScreen(),HadeithScreen(),Placeholder(),Placeholder(),Placeholder(),Placeholder(),][currentPageIndex],
+      body: [QuranScreen(),HadithScreen(),SebhaScreen(),Placeholder(),Placeholder(),Placeholder(),][currentPageIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentPageIndex,
         onDestinationSelected: (pIndex) {

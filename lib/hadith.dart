@@ -2,10 +2,11 @@ import 'dart:math';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+
 import 'utils.dart';
 
-class HadeithScreen extends StatelessWidget {
-  const HadeithScreen({super.key});
+class HadithScreen extends StatelessWidget {
+  const HadithScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,18 +37,14 @@ class HadeithScreen extends StatelessWidget {
             children: [
               Image.asset('assets/Images/img_header.png'),
               Expanded(
-                child:CarouselSlider(
+                child:CarouselSlider.builder(
                   options: CarouselOptions(
                     enlargeCenterPage: true,
                     enableInfiniteScroll: true,
                     height: 620,
-
                   ),
-                  items: [
-                    HadeithCard(),
-                    HadeithCard(),
-                    HadeithCard(),
-                  ],
+                  itemCount: hadithList.length,
+                  itemBuilder: (context,index,i)=>HadithCard(index: index,),
                 ),
               ),
             ],
@@ -58,8 +55,9 @@ class HadeithScreen extends StatelessWidget {
   }
 }
 
-class HadeithCard extends StatelessWidget {
-  const HadeithCard({super.key});
+class HadithCard extends StatelessWidget {
+  final int index;
+  const HadithCard({super.key, required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +66,7 @@ class HadeithCard extends StatelessWidget {
       height: heightRatio(context, 650),
       padding: EdgeInsetsGeometry.only(left:  9,right: 9, top:  12),
       decoration: BoxDecoration(
+        image: DecorationImage(image: AssetImage('assets/Images/HadithCardBackGround 1.png'),invertColors: false),
         color: mainColor,
         borderRadius: BorderRadius.all(Radius.circular(20)),
       ),
@@ -94,7 +93,7 @@ class HadeithCard extends StatelessWidget {
               ],
             ),
               Text(
-                'الحديث الأول',
+                hadithList[index].title,
                 style: TextStyle(
                   color: Colors.black,
                   fontSize: widthRatio(context, 20),
@@ -103,26 +102,14 @@ class HadeithCard extends StatelessWidget {
             ]
           ),
           Expanded(
-            child: Stack(
-              children: [
-                Column(
-                  children: [
-                    Expanded(child: Image.asset('assets/Images/quranSura.png',alignment: AlignmentGeometry.center,)),
-                    Image.asset('assets/Images/img_bottom_decoration.png',color: Color(0xff505050),alignment: AlignmentGeometry.bottomCenter,fit: BoxFit.fitWidth,),
-                  ],
-                ),
-                Expanded(
-                child: SingleChildScrollView(
-                  child: Text(
-                    """ عن أمـيـر المؤمنـين أبي حـفص عمر بن الخطاب رضي الله عنه ، قال : سمعت رسول الله صلى الله عـليه وسلم يـقـول : ( إنـما الأعـمـال بالنيات وإنـمـا لكـل امـرئ ما نـوى . فمن كـانت هجرته إلى الله ورسولـه فهجرتـه إلى الله ورسـوله ومن كانت هجرته لـدنيا يصـيبها أو امرأة ينكحها فهجرته إلى ما هاجر إليه ).
-رواه إمام المحد ثين أبـو عـبـد الله محمد بن إسماعـيل بن ابراهـيـم بن المغـيره بن بـرد زبه البخاري الجعـفي،[رقم:1] وابـو الحسـيـن مسلم بن الحجاج بن مـسلم القـشـيري الـنيسـابـوري [رقم :1907] رضي الله عنهما في صحيحيهما اللذين هما أصح الكتب المصنفه. 
-""",
-                    style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,height: 1.9),textAlign: TextAlign.right,
-                  ),
-                ),
-              ),]
+            child: SingleChildScrollView(
+              child: Text(
+                hadithList[index].content,
+                style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold,height: 1.9),textAlign: TextAlign.right,
+              ),
             ),
           ),
+          Image.asset('assets/Images/img_bottom_decoration.png',color: Color(0xff505050),alignment: AlignmentGeometry.bottomCenter,fit: BoxFit.fitWidth,),
         ],
       ),
     );

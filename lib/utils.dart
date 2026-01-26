@@ -1,5 +1,8 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
+import 'models/hadith_model.dart';
 
+List<Hadith> hadithList = [];
 List<String> arabicAuranSuras = [
   "الفاتحه",
   "البقرة",
@@ -350,6 +353,16 @@ List<String> ayaNumber = [
 ];
 List<int> mostRecent = [];
 
+Future<void> loadHadith(int index)async{
+  String hadithfile = await rootBundle.loadString('assets/Hadeeth/Hadeeth/h$index.txt');
+  Hadith h = Hadith(title: hadithfile.split('\n')[0], content: hadithfile.split('\n')[1]);
+  hadithList.add(h);
+}
+void loadHadithList() async{
+  for(int i = 1;i<50;i++){
+    await loadHadith(i);
+  }
+}
 Color mainColor = Color(0xffE2BE7F);
 Color secColor = Color(0xff121212);
 Color textColor = Color(0xffffffff);
