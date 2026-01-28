@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import 'intoscreen.dart';
 import 'quran_screen.dart';
@@ -8,16 +7,13 @@ import 'sebha_screen.dart';
 import 'radio.dart';
 import 'time_screen.dart';
 
-import 'islami_provider.dart';
 import 'theme.dart';
 import 'utils.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   loadHadithList();
-  runApp(Provider(create:(_)=>IslamiProvider(),
-  child: const MyApp(),
-  ));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
