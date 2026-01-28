@@ -47,7 +47,7 @@ class _SebhaScreenState extends State<SebhaScreen> {
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 36,
-                  color: Colors.white,
+                  color: textColor,
                 ),
               ),
 
@@ -81,7 +81,7 @@ class _SebhaScreenState extends State<SebhaScreen> {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 36,
-                            color: Colors.white,
+                            color: textColor,
                           ),
                         ),
                       ),

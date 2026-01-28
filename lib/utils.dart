@@ -117,7 +117,7 @@ List<String> arabicAuranSuras = [
   "المسد",
   "الإخلاص",
   "الفلق",
-  "الناس"
+  "الناس",
 ];
 List<String> englishQuranSurahs = [
   "Al-Fatiha",
@@ -233,7 +233,7 @@ List<String> englishQuranSurahs = [
   "Al-Masad",
   "Al-Ikhlas",
   "Al-Falaq",
-  "An-Nas"
+  "An-Nas",
 ];
 List<String> ayaNumber = [
   '7',
@@ -349,25 +349,35 @@ List<String> ayaNumber = [
   '5',
   '4',
   '5',
-  '6'
+  '6',
 ];
 List<int> mostRecent = [];
 
-Future<void> loadHadith(int index)async{
-  String hadithfile = await rootBundle.loadString('assets/Hadeeth/Hadeeth/h$index.txt');
-  Hadith h = Hadith(title: hadithfile.split('\n')[0], content: hadithfile.split('\n')[1]);
+Future<void> loadHadith(int index) async {
+  String hadithfile = await rootBundle.loadString(
+    'assets/Hadeeth/Hadeeth/h$index.txt',
+  );
+  Hadith h = Hadith(
+    title: hadithfile.split('\n')[0],
+    content: hadithfile.split('\n')[1],
+  );
   hadithList.add(h);
 }
-void loadHadithList() async{
-  for(int i = 1;i<50;i++){
+
+void loadHadithList() async {
+  for (int i = 1; i < 50; i++) {
     await loadHadith(i);
   }
 }
+
 Color mainColor = Color(0xffE2BE7F);
 Color secColor = Color(0xff121212);
 Color textColor = Color(0xffffffff);
-double widthRatio(BuildContext context,double num)=>MediaQuery.of(context).size.width*num/430;
-double heightRatio(BuildContext context,double num)=>MediaQuery.of(context).size.height*num/932;
-double getHeight(BuildContext context,)=>MediaQuery.of(context).size.height;
-double getWidth(BuildContext context,)=>MediaQuery.of(context).size.width;
-
+Color fadedGray = Color(0xB2202020);
+Color darkGray = Color(0xff202020);
+double widthRatio(BuildContext context, double num) =>
+    MediaQuery.of(context).size.width * num / 430;
+double heightRatio(BuildContext context, double num) =>
+    MediaQuery.of(context).size.height * num / 932;
+double getHeight(BuildContext context) => MediaQuery.of(context).size.height;
+double getWidth(BuildContext context) => MediaQuery.of(context).size.width;

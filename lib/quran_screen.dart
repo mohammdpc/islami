@@ -1,7 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
+
 import 'utils.dart';
+import 'content_viewer.dart';
 
 class QuranScreen extends StatefulWidget {
   const QuranScreen({super.key});
@@ -56,7 +56,7 @@ class _QuranScreenState extends State<QuranScreen> {
 
               onChanged: (v) {
                 searchList.clear();
-                if(v.isNotEmpty){
+                if (v.isNotEmpty) {
                   if (RegExp(r'[A-Z]').hasMatch(v.toUpperCase())) {
                     String t = '';
                     for (int i = 0; i < englishQuranSurahs.length; i++) {
@@ -90,7 +90,7 @@ class _QuranScreenState extends State<QuranScreen> {
                             ? Text('Not Found')
                             : SuraTile(
                                 index: searchList[index],
-                                f: (){
+                                f: () {
                                   addToMostRecent(searchList[index]);
                                   debugPrint(index.toString());
                                 },
@@ -99,7 +99,7 @@ class _QuranScreenState extends State<QuranScreen> {
                     ),
                   )
                 : Expanded(
-                  child: Column(
+                    child: Column(
                       children: [
                         mostRecent.isEmpty
                             ? SizedBox()
@@ -121,7 +121,9 @@ class _QuranScreenState extends State<QuranScreen> {
                                       scrollDirection: Axis.horizontal,
                                       itemCount: mostRecent.length,
                                       itemBuilder: (context, index) =>
-                                          RecentlyCards(index: mostRecent[index]),
+                                          RecentlyCards(
+                                            index: mostRecent[index],
+                                          ),
                                     ),
                                   ),
                                 ],
@@ -154,7 +156,7 @@ class _QuranScreenState extends State<QuranScreen> {
                         ),
                       ],
                     ),
-                ),
+                  ),
           ],
         ),
       ),
@@ -168,49 +170,57 @@ class RecentlyCards extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsetsGeometry.all(widthRatio(context, 5)),
-      padding: EdgeInsetsGeometry.all(widthRatio(context, 7)),
-      width: widthRatio(context, 283),
-      height: heightRatio(context, 150),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
-        color: mainColor,
+    return InkResponse(
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ContentViewer(index: index, sura: true),
+        ),
       ),
-      child: Row(
-        children: [
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: widthRatio(context, 10),
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    englishQuranSurahs[index],
-                    style: TextStyle(fontSize: widthRatio(context, 24)),
-                  ),
-                  Text(
-                    arabicAuranSuras[index],
-                    style: TextStyle(fontSize: widthRatio(context, 24)),
-                  ),
-                  Text(
-                    '${ayaNumber[index]} Verses',
-                    style: TextStyle(fontSize: widthRatio(context, 14)),
-                  ),
-                ],
+      child: Container(
+        margin: EdgeInsetsGeometry.all(widthRatio(context, 5)),
+        padding: EdgeInsetsGeometry.all(widthRatio(context, 7)),
+        width: widthRatio(context, 283),
+        height: heightRatio(context, 150),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(20)),
+          color: mainColor,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: widthRatio(context, 10),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      englishQuranSurahs[index],
+                      style: TextStyle(fontSize: widthRatio(context, 24)),
+                    ),
+                    Text(
+                      arabicAuranSuras[index],
+                      style: TextStyle(fontSize: widthRatio(context, 24)),
+                    ),
+                    Text(
+                      '${ayaNumber[index]} Verses',
+                      style: TextStyle(fontSize: widthRatio(context, 14)),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          Expanded(
-            child: Image.asset(
-              'assets/Images/quranSura.png',
-              fit: BoxFit.fitHeight,
+            Expanded(
+              child: Image.asset(
+                'assets/Images/quranSura.png',
+                fit: BoxFit.fitHeight,
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -227,7 +237,9 @@ class SuraTile extends StatelessWidget {
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => SuraScreen(index: index)),
+          MaterialPageRoute(
+            builder: (context) => ContentViewer(index: index, sura: true),
+          ),
         );
         f();
       },
@@ -255,114 +267,6 @@ class SuraTile extends StatelessWidget {
       trailing: Text(
         arabicAuranSuras[index],
         style: TextStyle(color: textColor, fontSize: widthRatio(context, 20)),
-      ),
-    );
-  }
-}
-
-class SuraScreen extends StatefulWidget {
-  final int index;
-  const SuraScreen({super.key, required this.index});
-
-  @override
-  State<SuraScreen> createState() => _SuraScreenState();
-}
-
-class _SuraScreenState extends State<SuraScreen> {
-  late List<String> contentList = [];
-  void loadSuraContent() async {
-    if (contentList.isEmpty) {
-      String suraContent = await DefaultAssetBundle.of(
-        context,
-      ).loadString('assets/Suras/Suras/${widget.index + 1}.txt');
-      contentList = suraContent.split('\n');
-      contentList.removeWhere((e) => e.trim().isEmpty);
-      setState(() {});
-    }
-  }
-
-  @override
-  void initState() {
-    loadSuraContent();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Color(0xff202020),
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: mainColor),
-        title: Text(
-          englishQuranSurahs[widget.index],
-          style: TextStyle(color: mainColor, fontSize: widthRatio(context, 20)),
-        ),
-        centerTitle: true,
-        backgroundColor: Color(0xff202020),
-      ),
-      body: Container(
-        padding: EdgeInsetsGeometry.symmetric(
-          horizontal: widthRatio(context, 18),
-          vertical: heightRatio(context, 8),
-        ),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage('assets/Images/img_bottom_decoration.png'),
-            alignment: AlignmentGeometry.bottomCenter,
-          ),
-        ),
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Image.asset(
-                  'assets/Images/img_left_corner.png',
-                  height: heightRatio(context, 93),
-                ),
-                Text(
-                  arabicAuranSuras[widget.index],
-                  style: TextStyle(
-                    color: mainColor,
-                    fontSize: widthRatio(context, 20),
-                  ),
-                ),
-                Transform.rotate(
-                  angle: pi / 2,
-                  child: Image.asset(
-                    'assets/Images/img_left_corner.png',
-                    height: heightRatio(context, 93),
-                  ),
-                ),
-              ],
-            ),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(bottom: getWidth(context) * .225),
-                child: ListView.builder(
-                  itemCount: contentList.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      padding: EdgeInsets.all(5),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(16)),
-                        color: Color(0xff202020),
-                      ),
-                      child: Text(
-                        '[${index + 1}]${contentList[index]}',
-                        textAlign: TextAlign.right,
-                        style: TextStyle(
-                          color: mainColor,
-                          fontSize: widthRatio(context, 20),
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

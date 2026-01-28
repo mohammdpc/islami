@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import 'intoscreen.dart';
 import 'quran_screen.dart';
 import 'hadith.dart';
 import 'sebha_screen.dart';
+import 'radio.dart';
+import 'time_screen.dart';
 
 import 'islami_provider.dart';
 import 'theme.dart';
@@ -27,15 +30,15 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Islami',
       theme: islamiTheme,
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const IntoScreen(home: MyHomePage(),),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key,});
 
-  final String title;
+
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -47,7 +50,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: [QuranScreen(),HadithScreen(),SebhaScreen(),Placeholder(),Placeholder(),Placeholder(),][currentPageIndex],
+      body: [QuranScreen(),HadithScreen(),SebhaScreen(),RadioScreen(),TimeScreen(),][currentPageIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentPageIndex,
         onDestinationSelected: (pIndex) {
