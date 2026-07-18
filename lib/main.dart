@@ -1,9 +1,18 @@
-import 'package:flutter/material.dart';
+  import 'package:flutter/material.dart';
 
-import 'quranscreen.dart';
-import 'hadeith.dart';
+import 'intoscreen.dart';
+import 'quran_screen.dart';
+import 'hadith.dart';
+import 'sebha_screen.dart';
+import 'radio.dart';
+import 'time_screen.dart';
+
 import 'theme.dart';
-void main() {
+import 'utils.dart';
+
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  loadHadithList();
   runApp(const MyApp());
 }
 
@@ -17,15 +26,15 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Islami',
       theme: islamiTheme,
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const IntoScreen(home: MyHomePage(),),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  const MyHomePage({super.key,});
 
-  final String title;
+
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -37,7 +46,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: [QuranScreen(),HadeithScreen(),Placeholder(),Placeholder(),Placeholder(),Placeholder(),][currentPageIndex],
+      body: [QuranScreen(),HadithScreen(),SebhaScreen(),RadioScreen(),TimeScreen(),][currentPageIndex],
       bottomNavigationBar: NavigationBar(
         selectedIndex: currentPageIndex,
         onDestinationSelected: (pIndex) {
